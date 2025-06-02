@@ -5,13 +5,11 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 /**
- * Wrapper class for Exception Handling
- * See {@link com.kelley.medicationassistant.exception.GlobalExceptionHandler}
+ * ResponseDTO for medication information requests, wraps OpenAI API response string.
  */
 @Data
-@AllArgsConstructor
 @NoArgsConstructor
-public class APIResponse {
+@AllArgsConstructor
+public class PromptResponse {
     private String message;
-    private String path;
 }
