@@ -1,1 +1,49 @@
- 
+# Medication Assistant API
+
+A Spring Boot RESTful API that integrates with the [RxNorm API](https://lhncbc.nlm.nih.gov/RxNav/APIs/) and [OpenAI Chat API](https://platform.openai.com/docs/guides/gpt) to provide information about medications, including side effects, usage, and more.
+
+
+-  **Search Medications** using the RxNorm API
+-  **AI-Generated Descriptions** via OpenAI (ChatGPT)
+
+
+- Java 17+
+- Spring Boot 3.x
+- Spring Web
+- OpenFeign for external APIs
+- JUnit 5 & Mockito for testing
+- Lombok for boilerplate reduction
+
+
+## Walkthrough
+
+Example:
+api/v1/medication/search?query=Lipitor 
+
+Returns the following list of valid medications from RxNorm:
+
+![medassistant1](https://github.com/user-attachments/assets/77199625-1913-46f4-a48e-d9ae78a630b9)
+
+
+Any of these medications can then be selected and passed to api/v1/information in the request body.
+
+Example:
+{
+    "medicationName": "atorvastatin 80 MG Oral Tablet [Lipitor]",
+    "medicationChatOption": "SIDE_EFFECTS"
+}
+
+'medicationChatOption' is an Enum with options: GENERAL_INFORMATION, DOSAGE, SIDE_EFFECTS
+
+The request is then concatenated into a prompt and sent to OpenAI, which will return a response to the query.
+
+If you want to clone the repository and test it, you will need a valid OpenAI API Key.
+
+Unfortunately, OpenAI is not free. If you create a key but do not fund your account, you will recieve the following error:
+
+![medassistant3](https://github.com/user-attachments/assets/b8846142-4fda-4810-a23e-d381c929a8fd)
+
+I created a mock test for the getInformation() method to show the method works as intended if one does not have access to an API key for OpenAI:
+
+![medassistant4](https://github.com/user-attachments/assets/c9c3a5ee-60bd-4b4e-ae2c-c8c1ba190c85)
+
