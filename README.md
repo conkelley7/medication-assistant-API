@@ -10,10 +10,36 @@ A Spring Boot RESTful API that integrates with the [RxNorm API](https://lhncbc.n
 - Java 17+
 - Spring Boot 3.x
 - Spring Web
+- Spring Security with JWT
 - OpenFeign for external APIs
 - JUnit 5 & Mockito for testing
 - Lombok for boilerplate reduction
 
+
+## Update 06/16
+- Added Spring Security JWT implementation just for practice.
+- Now to call any endpoints you must create a user using user/signup endpoint or use the default user created in SecurityConfig
+
+application.properties requires the following properties to store users in H2 Database
+```
+# Database Configuration
+spring.datasource.url=jdbc:h2:mem:testdb
+spring.datasource.username=sa
+spring.datasource.password=
+spring.jpa.hibernate.ddl-auto=create-drop
+spring.h2.console.enabled=true
+spring.h2.console.path=/h2-console
+```
+
+Also, generate a 256-bit secret key from https://jwtsecrets.com/ and add the following to application.properties
+```
+medicationassistant.jwtsecret={YOUR_SECRET_KEY_HERE}
+```
+
+Call auth/login endpoint with valid credentials in request body to recieve a Bearer token to be used for other endpoints.
+The bearer token will be located in the Authorization header with "Bearer " prefix.
+
+I'll likely expand further in the future to incorporate some use cases for account creation (beyond just me wanting to practice with Spring Security)
 
 ## Walkthrough
 
