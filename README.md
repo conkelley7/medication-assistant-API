@@ -73,3 +73,9 @@ I created a mock test for the getInformation() method to show the method works a
 
 ![medassistant4](https://github.com/user-attachments/assets/c9c3a5ee-60bd-4b4e-ae2c-c8c1ba190c85)
 
+All medications from the 'search' endpoint will return an rxcui, which is a unique ID for identfying
+medications within the RxNorm API. Another endpoint has been recently added that will find related medications
+given an rxcui. Here is an example of how to call this endpoint with an rxcui of 9801:
+
+
+/api/v1/medication/related/9801

@@ -27,4 +27,14 @@ public interface MedicationService {
      * @return {@link PromptResponse} DTO containing message from AI provider
      */
     PromptResponse getInformation(PromptRequest request);
+
+    /**
+     * Given an rxcui of a drug (obtained from 'search' method), this method will return a paginated
+     * list of {@link Medication} objects representing related drugs
+     *
+     * @param rxcui rxcui of the drug from which to find related drugs
+     * @param pageable pagination details
+     * @return Page containing paginated related Medication search results
+     */
+    Page<Medication> getRelated(String rxcui, Pageable pageable);
 }

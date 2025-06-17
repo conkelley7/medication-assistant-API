@@ -1,8 +1,10 @@
 package com.kelley.medicationassistant.feignclient;
 
-import com.kelley.medicationassistant.payload.RxNormResponse;
+import com.kelley.medicationassistant.payload.RxNormGetDrugsResponse;
+import com.kelley.medicationassistant.payload.RxNormGetRelatedDrugsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 
 /**
@@ -12,5 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 public interface RxNormClient {
 
     @GetMapping(value = "/drugs.json")
-    RxNormResponse getDrugs(@RequestParam("name") String name);
+    RxNormGetDrugsResponse getDrugs(@RequestParam("name") String name);
+
+    @GetMapping(value = "/rxcui/{rxcui}/allrelated.json")
+    RxNormGetRelatedDrugsResponse getRelatedDrugs(@PathVariable String rxcui);
 }
