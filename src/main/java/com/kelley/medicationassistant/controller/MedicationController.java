@@ -4,6 +4,7 @@ import com.kelley.medicationassistant.model.Medication;
 import com.kelley.medicationassistant.payload.PromptRequest;
 import com.kelley.medicationassistant.payload.PromptResponse;
 import com.kelley.medicationassistant.service.MedicationService;
+import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -35,6 +36,13 @@ public class MedicationController {
     public ResponseEntity<Page<Medication>> search(@RequestParam String query,
                                                    Pageable pageable) {
         Page<Medication> response = medicationService.search(query, pageable);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/related/{rxcui}")
+    public ResponseEntity<Page<Medication>> getRelated(@PathVariable String rxcui,
+                                                       Pageable pageable) {
+        Page<Medication> response = medicationService.getRelated(rxcui, pageable);
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 

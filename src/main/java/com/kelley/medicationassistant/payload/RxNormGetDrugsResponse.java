@@ -1,5 +1,6 @@
 package com.kelley.medicationassistant.payload;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -7,14 +8,16 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 /**
- * Follows expected formatting for responses from RxNorm API.
+ * Follows expected formatting for 'getDrugs' response from RxNorm API.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class RxNormResponse {
+public class RxNormGetDrugsResponse {
     private DrugGroup drugGroup;
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -22,6 +25,7 @@ public class RxNormResponse {
         private List<ConceptGroup> conceptGroup;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -29,6 +33,7 @@ public class RxNormResponse {
         private List<ConceptProperty> conceptProperties;
     }
 
+    @JsonIgnoreProperties(ignoreUnknown = true)
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
