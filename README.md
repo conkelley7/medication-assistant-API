@@ -20,7 +20,7 @@ A Spring Boot RESTful API that integrates with the [RxNorm API](https://lhncbc.n
 - Added Spring Security JWT implementation just for practice.
 - Now to call any endpoints you must create a user using user/signup endpoint or use the default user created in SecurityConfig
 
-application.properties requires the following properties to store users in H2 Database
+application.properties contains the following properties to store users in H2 Database
 ```
 # Database Configuration
 spring.datasource.url=jdbc:h2:mem:testdb
@@ -32,6 +32,8 @@ spring.h2.console.path=/h2-console
 ```
 
 Also, generate a 256-bit secret key from https://jwtsecrets.com/ and add the following to application.properties
+(Or just use the one already in the application.properties, which I have pushed to the repo - not a production app, so
+for convenience I have just pushed it).
 ```
 medicationassistant.jwtsecret={YOUR_SECRET_KEY_HERE}
 ```
