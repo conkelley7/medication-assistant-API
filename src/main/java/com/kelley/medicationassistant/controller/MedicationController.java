@@ -4,7 +4,6 @@ import com.kelley.medicationassistant.model.Medication;
 import com.kelley.medicationassistant.payload.PromptRequest;
 import com.kelley.medicationassistant.payload.PromptResponse;
 import com.kelley.medicationassistant.service.MedicationService;
-import org.springframework.boot.autoconfigure.graphql.GraphQlProperties;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -12,8 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Rest Controller class, exposes API endpoints.
- * {@link MedicationService} injected via constructor injection.
+ * Rest Controller class, exposes API endpoints relating to medication searches and chat queries.
  */
 @RestController
 @RequestMapping("/api/v1/medication")

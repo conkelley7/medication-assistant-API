@@ -23,18 +23,24 @@ public class MedicationServiceImpl implements MedicationService {
 
     private final RxNormClient rxNormClient;
     private final OpenAiClient openAiClient;
+    private final SearchHistoryService searchHistoryService;
 
     @Value("${spring.ai.openai.model}")
     private String model;
 
-    public MedicationServiceImpl(RxNormClient rxNormClient, OpenAiClient openAiClient) {
+    public MedicationServiceImpl(RxNormClient rxNormClient, OpenAiClient openAiClient,
+                                 SearchHistoryService searchHistoryService) {
         this.rxNormClient = rxNormClient;
         this.openAiClient = openAiClient;
+        this.searchHistoryService = searchHistoryService;
     }
 
     //TODO : REFACTOR THIS METHOD TO MATCH THE NEW 'getRelated' METHOD BELOW, WHICH USES STREAMS
     @Override
     public Page<Medication> search(String query, Pageable pageable) {
+        // Save search query to database in 'search_history' table
+        searchHistoryService.addQueryToSearchHistory(query);
+
         // Call RxNorm API using OpenFeign
         RxNormGetDrugsResponse response = rxNormClient.getDrugs(query);
 
