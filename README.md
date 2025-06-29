@@ -53,15 +53,17 @@ Returns the following list of valid medications from RxNorm:
 ![medassistant1](https://github.com/user-attachments/assets/77199625-1913-46f4-a48e-d9ae78a630b9)
 
 
-Any of these medications can then be selected and passed to api/v1/information in the request body.
+The search `Lipitor` in then saved in the Database for the user sending the request. Any of the medications returned above can then be selected and passed to api/v1/information in the request body. 
 
 Example:
+```json
 {
     "medicationName": "atorvastatin 80 MG Oral Tablet [Lipitor]",
     "medicationChatOption": "SIDE_EFFECTS"
 }
+```
 
-'medicationChatOption' is an Enum with options: GENERAL_INFORMATION, DOSAGE, SIDE_EFFECTS
+`medicationChatOption` is an Enum with options: `GENERAL_INFORMATION`, `DOSAGE`, `SIDE_EFFECTS`
 
 The request is then concatenated into a prompt and sent to OpenAI, which will return a response to the query.
 
