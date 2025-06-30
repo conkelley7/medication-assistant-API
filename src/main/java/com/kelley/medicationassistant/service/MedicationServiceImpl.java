@@ -5,13 +5,14 @@ import com.kelley.medicationassistant.feignclient.OpenAiClient;
 import com.kelley.medicationassistant.feignclient.RxNormClient;
 import com.kelley.medicationassistant.model.Medication;
 import com.kelley.medicationassistant.payload.*;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -25,6 +26,8 @@ public class MedicationServiceImpl implements MedicationService {
     private final OpenAiClient openAiClient;
     private final SearchHistoryService searchHistoryService;
 
+    private final Logger medicationServicelogger = LoggerFactory.getLogger(MedicationServiceImpl.class);
+
     @Value("${spring.ai.openai.model}")
     private String model;
 
@@ -35,66 +38,55 @@ public class MedicationServiceImpl implements MedicationService {
         this.searchHistoryService = searchHistoryService;
     }
 
-    //TODO : REFACTOR THIS METHOD TO MATCH THE NEW 'getRelated' METHOD BELOW, WHICH USES STREAMS
     @Override
     public Page<Medication> search(String query, Pageable pageable) {
         // Save search query to database in 'search_history' table
         searchHistoryService.addQueryToSearchHistory(query);
 
         // Call RxNorm API using OpenFeign
+        medicationServicelogger.info("Sending 'getDrugs' request to RxNorm API");
         RxNormGetDrugsResponse response = rxNormClient.getDrugs(query);
 
-        /*
-        Initialize list to contain all returned medications.
-        RxNorm API does not allow for pagination, so custom pagination
-        will be implemented below.
-         */
-        List<Medication> allMedications = new ArrayList<>();
-
-        // Extract desired data from the nested RxNorm API Response
-        if (response != null && response.getDrugGroup() != null) {
-            List<RxNormGetDrugsResponse.ConceptGroup> conceptGroups = response.getDrugGroup().getConceptGroup();
-
-            if (conceptGroups == null)
-                throw new APIException("Search returned no results. Please try a different query.");
-
-            for (RxNormGetDrugsResponse.ConceptGroup group : conceptGroups) {
-                if (group.getConceptProperties() != null) {
-                    for (RxNormGetDrugsResponse.ConceptProperty prop : group.getConceptProperties()) {
-                        allMedications.add(new Medication(
-                                prop.getName(),
-                                prop.getRxcui()
-                        ));
-                    }
-                }
-            }
-
-            // Total number of medications fetched from RxNorm
-            int total = allMedications.size();
-
-
-            /*
-             Calculate start and end index based on page and size
-             */
-
-            // page 1, size 10 => offset 10
-            int start = (int) pageable.getOffset();
-
-            int end = Math.min(start + (pageable.getPageSize()), total);
-
-            // If requested start point is greater than total medication count, return empty page
-            if (start > end) {
-                return new PageImpl<>(Collections.emptyList(), pageable, total);
-            }
-
-            // Construct a sublist of items for the requested page
-            List<Medication> medications = allMedications.subList(start, end);
-
-            return new PageImpl<>(medications, pageable, total);
-
-        } else {
-            throw new APIException("Search returned no results. Please try a different query.");
+        if (response == null || response.getDrugGroup() == null) {
+            throw new APIException("Search returned no results");
         }
+
+        List<RxNormGetDrugsResponse.ConceptGroup> conceptGroupList = response.getDrugGroup().getConceptGroup();
+
+        if (conceptGroupList == null) {
+            throw new APIException("Search returned no results");
+        }
+
+        List<Medication> allMedications = conceptGroupList.stream()
+                .filter(conceptGroup -> conceptGroup.getConceptProperties() != null)
+                .flatMap(conceptGroup -> conceptGroup.getConceptProperties().stream())
+                .map(conceptProperty -> new Medication(
+                        conceptProperty.getName(),
+                        conceptProperty.getRxcui()
+                )).toList();
+
+        // Total number of medications fetched from RxNorm
+        int total = allMedications.size();
+
+
+        /*
+          Calculate start and end index based on page and size
+        */
+
+        // page 1, size 10 => offset 10
+        int start = (int) pageable.getOffset();
+
+        int end = Math.min(start + (pageable.getPageSize()), total);
+
+        // If requested start point is greater than total medication count, return empty page
+        if (start > end) {
+            return new PageImpl<>(Collections.emptyList(), pageable, total);
+        }
+
+        // Construct a sublist of items for the requested page
+        List<Medication> medications = allMedications.subList(start, end);
+
+        return new PageImpl<>(medications, pageable, total);
 
 
     }
@@ -112,6 +104,7 @@ public class MedicationServiceImpl implements MedicationService {
         openAiRequest.setMessages(List.of(message));
 
         // Call OpenAI API using OpenFeign client
+        medicationServicelogger.info("Sending chat request to OpenAI API");
         OpenAiResponse openAiResponse = openAiClient.chat(openAiRequest);
 
         // Create Prompt Response containing OpenAI assistant's reply
@@ -125,6 +118,7 @@ public class MedicationServiceImpl implements MedicationService {
     @Override
     public Page<Medication> getRelated(String rxcui, Pageable pageable) {
         // Call RxNorm API using OpenFeign to find related Medications given an rxcui
+        medicationServicelogger.info("Sending 'getRelatedDrugs' request to RxNorm API");
         RxNormGetRelatedDrugsResponse response = rxNormClient.getRelatedDrugs(rxcui);
 
         // If response is null or empty, throw API Exception
