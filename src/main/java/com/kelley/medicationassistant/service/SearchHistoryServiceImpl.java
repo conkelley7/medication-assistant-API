@@ -9,7 +9,6 @@ import com.kelley.medicationassistant.repository.UserRepository;
 import com.kelley.medicationassistant.security.service.AuthUtil;
 import org.modelmapper.ModelMapper;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
@@ -45,11 +44,6 @@ public class SearchHistoryServiceImpl implements SearchHistoryService{
 
     @Override
     public Page<SearchDTO> getSearchHistoryByUser(User user, Pageable pageable) {
-        PageRequest pageRequest = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                pageable.getSort()
-        );
 
         Page<Search> searchHistoryPage = searchHistoryRepository.findAllByUser(user, pageable);
 
@@ -58,11 +52,6 @@ public class SearchHistoryServiceImpl implements SearchHistoryService{
 
     @Override
     public Page<SearchDTO> getSearchHistoryByUserId(Long userId, Pageable pageable) {
-        PageRequest pageRequest = PageRequest.of(
-                pageable.getPageNumber(),
-                pageable.getPageSize(),
-                pageable.getSort()
-        );
 
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new APIException("User not found with ID: " + userId));
