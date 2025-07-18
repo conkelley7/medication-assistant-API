@@ -18,9 +18,13 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.annotation.*;
 
+
+/**
+ * AuthController is responsible for handling user authentication and related operations
+ * such as logging in and retrieving the current logged-in user's details.
+ */
 @RestController
 @RequestMapping("/api/v1/auth")
 public class AuthController {
@@ -41,6 +45,13 @@ public class AuthController {
         this.modelMapper = modelMapper;
     }
 
+    /**
+     * Handles user login by authenticating the user and returning a JWT token.
+     *
+     * @param loginRequest The login request containing either the username or email and password.
+     * @return ResponseEntity containing LoginResponse DTO (username and status), and JWT token.
+     * @throws APIException if neither username nor email is provided in the request.
+     */
     @PostMapping("/login")
     public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
         if (loginRequest.getUsername() == null && loginRequest.getEmail() == null)
@@ -71,6 +82,12 @@ public class AuthController {
                 .body(loginResponse);
     }
 
+    /**
+     * Retrieves the details of the currently authenticated user.
+     *
+     * @return ResponseEntity containing the user's details as a UserResponse DTO.
+     * @throws APIException if no authenticated user is found in the security context.
+     */
     @GetMapping("/current")
     public ResponseEntity<UserResponse> getCurrentLoggedInUser() {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
