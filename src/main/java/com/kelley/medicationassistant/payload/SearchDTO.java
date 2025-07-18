@@ -6,6 +6,9 @@ import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
+/**
+ * DTO for search-history related requests involving {@link com.kelley.medicationassistant.model.Search}
+ */
 @Data
 @AllArgsConstructor
 @NoArgsConstructor

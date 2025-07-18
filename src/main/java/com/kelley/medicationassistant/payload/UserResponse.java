@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+/**
+ * Response DTO used for user-related requests, such as sign up or user detail retrieval.
+ */
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
