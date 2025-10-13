@@ -12,13 +12,15 @@ public class AuthUtil {
 
     private final UserRepository userRepository;
 
-    public AuthUtil(UserRepository userRepository) {
+    public AuthUtil( UserRepository userRepository ) {
         this.userRepository = userRepository;
     }
 
-    public User getLoggedInUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        return userRepository.findByUsername(authentication.getName())
-                .orElseThrow(() -> new UsernameNotFoundException("Could not find logged in user."));
+    public User getLoggedInUser( ) {
+
+        Authentication authentication = SecurityContextHolder.getContext( ).getAuthentication( );
+        return userRepository.findByUsername( authentication.getName( ) )
+                .orElseThrow( ( ) -> new UsernameNotFoundException( "Could not find logged in user." ) );
+
     }
 }

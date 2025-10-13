@@ -19,34 +19,38 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 
     private final UserRepository userRepository;
 
-    public UserDetailsServiceImpl(UserRepository userRepository) {
+    public UserDetailsServiceImpl( UserRepository userRepository ) {
         this.userRepository = userRepository;
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new UsernameNotFoundException("User not found with username:" + username));
+    public UserDetails loadUserByUsername( String username ) throws UsernameNotFoundException {
+
+        User user = userRepository.findByUsername( username )
+                .orElseThrow( ( ) -> new UsernameNotFoundException( "User not found with username:" + username ) );
 
         org.springframework.security.core.userdetails.User.UserBuilder builder =
-                org.springframework.security.core.userdetails.User.withUsername(username);
+                org.springframework.security.core.userdetails.User.withUsername( username );
 
-        builder.password(user.getPassword());
-        builder.authorities(Collections.emptyList());
+        builder.password( user.getPassword( ) );
+        builder.authorities( Collections.emptyList( ) );
 
-        return builder.build();
+        return builder.build( );
+
     }
 
-    public UserDetails loadUserByEmail(String email) {
-        User user = userRepository.findByEmail(email)
-                .orElseThrow(() -> new APIException("User not found with email: " + email));
+    public UserDetails loadUserByEmail( String email ) {
+
+        User user = userRepository.findByEmail( email )
+                .orElseThrow( ( ) -> new APIException( "User not found with email: " + email) );
 
         org.springframework.security.core.userdetails.User.UserBuilder builder =
-                org.springframework.security.core.userdetails.User.withUsername(user.getUsername());
+                org.springframework.security.core.userdetails.User.withUsername( user.getUsername( ) );
 
-        builder.password(user.getPassword());
-        builder.authorities(Collections.emptyList());
+        builder.password( user.getPassword( ) );
+        builder.authorities( Collections.emptyList( ) );
 
-        return builder.build();
+        return builder.build( );
+
     }
 }

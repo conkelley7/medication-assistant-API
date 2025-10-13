@@ -29,7 +29,7 @@ public class AuthTokenFilter extends OncePerRequestFilter {
     private final UserDetailsServiceImpl userDetailsService;
     private static final Logger authTokenFilterLogger = LoggerFactory.getLogger(AuthTokenFilter.class);
 
-    public AuthTokenFilter(JwtService jwtService, UserDetailsServiceImpl userDetailsService) {
+    public AuthTokenFilter( JwtService jwtService, UserDetailsServiceImpl userDetailsService ) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;
     }
@@ -41,35 +41,36 @@ public class AuthTokenFilter extends OncePerRequestFilter {
      * the authentication object, and stores it in the Security Context.
      */
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal( HttpServletRequest request, HttpServletResponse response, FilterChain filterChain )
             throws ServletException, IOException {
-        authTokenFilterLogger.debug("AuthTokenFilter called for URI: {}", request.getRequestURI());
+        authTokenFilterLogger.debug( "AuthTokenFilter called for URI: {}", request.getRequestURI( ) );
         try {
-            String jwtFullString = request.getHeader(HttpHeaders.AUTHORIZATION);
+            String jwtFullString = request.getHeader( HttpHeaders.AUTHORIZATION );
             String jwt = null;
 
-            if (jwtFullString != null) {
-                jwt = jwtFullString.substring(7).trim();
+            if ( jwtFullString != null ) {
+                jwt = jwtFullString.substring( 7 ).trim( );
             }
 
-            if (jwt != null && jwtService.validateJwtToken(jwt)) {
-                String username = jwtService.getUsernameFromJwtToken(jwt);
+            if ( jwt != null && jwtService.validateJwtToken( jwt ) ) {
+                String username = jwtService.getUsernameFromJwtToken( jwt );
 
-                UserDetails userDetails = userDetailsService.loadUserByUsername(username);
+                UserDetails userDetails = userDetailsService.loadUserByUsername( username );
 
-                UsernamePasswordAuthenticationToken authentication =
-                        new UsernamePasswordAuthenticationToken(userDetails,
-                                null,
-                                userDetails.getAuthorities());
+                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities( )
+                );
 
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                authentication.setDetails( new WebAuthenticationDetailsSource( ).buildDetails( request ) );
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                SecurityContextHolder.getContext( ).setAuthentication( authentication );
             }
-        } catch (Exception e) {
-            logger.error("Cannot set user authentication: {}", e);
+        } catch ( Exception e ) {
+            logger.error( "Cannot set user authentication: {}", e );
         }
 
-        filterChain.doFilter(request, response);
+        filterChain.doFilter( request, response );
     }
 }
