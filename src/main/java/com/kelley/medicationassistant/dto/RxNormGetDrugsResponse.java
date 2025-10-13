@@ -10,14 +10,14 @@ import java.util.List;
 /**
  * Follows expected formatting for 'getDrugs' response from RxNorm API.
  */
-@JsonIgnoreProperties(ignoreUnknown = true)
+@JsonIgnoreProperties( ignoreUnknown = true )
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class RxNormGetDrugsResponse {
     private DrugGroup drugGroup;
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonIgnoreProperties( ignoreUnknown = true )
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -25,7 +25,7 @@ public class RxNormGetDrugsResponse {
         private List<ConceptGroup> conceptGroup;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonIgnoreProperties( ignoreUnknown = true )
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
@@ -33,7 +33,7 @@ public class RxNormGetDrugsResponse {
         private List<ConceptProperty> conceptProperties;
     }
 
-    @JsonIgnoreProperties(ignoreUnknown = true)
+    @JsonIgnoreProperties( ignoreUnknown = true )
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
