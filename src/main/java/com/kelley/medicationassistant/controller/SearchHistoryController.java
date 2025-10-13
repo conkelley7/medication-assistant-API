@@ -1,7 +1,7 @@
 package com.kelley.medicationassistant.controller;
 
 import com.kelley.medicationassistant.model.User;
-import com.kelley.medicationassistant.payload.SearchDTO;
+import com.kelley.medicationassistant.dto.SearchDTO;
 import com.kelley.medicationassistant.security.service.AuthUtil;
 import com.kelley.medicationassistant.service.SearchHistoryService;
 import org.springframework.data.domain.Page;

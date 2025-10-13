@@ -1,6 +1,6 @@
 package com.kelley.medicationassistant.exception;
 
-import com.kelley.medicationassistant.payload.APIResponse;
+import com.kelley.medicationassistant.dto.APIResponse;
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;

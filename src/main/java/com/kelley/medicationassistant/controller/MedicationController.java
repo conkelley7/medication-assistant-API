@@ -1,8 +1,8 @@
 package com.kelley.medicationassistant.controller;
 
 import com.kelley.medicationassistant.model.Medication;
-import com.kelley.medicationassistant.payload.PromptRequest;
-import com.kelley.medicationassistant.payload.PromptResponse;
+import com.kelley.medicationassistant.dto.PromptRequest;
+import com.kelley.medicationassistant.dto.PromptResponse;
 import com.kelley.medicationassistant.service.MedicationService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;

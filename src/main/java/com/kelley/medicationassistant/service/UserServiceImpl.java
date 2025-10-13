@@ -2,8 +2,8 @@ package com.kelley.medicationassistant.service;
 
 import com.kelley.medicationassistant.exception.APIException;
 import com.kelley.medicationassistant.model.User;
-import com.kelley.medicationassistant.payload.SignUpRequest;
-import com.kelley.medicationassistant.payload.UserResponse;
+import com.kelley.medicationassistant.dto.SignUpRequest;
+import com.kelley.medicationassistant.dto.UserResponse;
 import com.kelley.medicationassistant.repository.UserRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;

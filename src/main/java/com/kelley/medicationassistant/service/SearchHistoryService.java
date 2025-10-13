@@ -2,7 +2,7 @@ package com.kelley.medicationassistant.service;
 
 import com.kelley.medicationassistant.model.Search;
 import com.kelley.medicationassistant.model.User;
-import com.kelley.medicationassistant.payload.SearchDTO;
+import com.kelley.medicationassistant.dto.SearchDTO;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 

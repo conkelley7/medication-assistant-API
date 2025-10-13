@@ -3,7 +3,7 @@ package com.kelley.medicationassistant.service;
 import com.kelley.medicationassistant.exception.APIException;
 import com.kelley.medicationassistant.model.Search;
 import com.kelley.medicationassistant.model.User;
-import com.kelley.medicationassistant.payload.SearchDTO;
+import com.kelley.medicationassistant.dto.SearchDTO;
 import com.kelley.medicationassistant.repository.SearchHistoryRepository;
 import com.kelley.medicationassistant.repository.UserRepository;
 import com.kelley.medicationassistant.security.service.AuthUtil;

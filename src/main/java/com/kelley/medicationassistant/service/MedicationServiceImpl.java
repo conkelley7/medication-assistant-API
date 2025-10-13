@@ -4,7 +4,7 @@ import com.kelley.medicationassistant.exception.APIException;
 import com.kelley.medicationassistant.feignclient.OpenAiClient;
 import com.kelley.medicationassistant.feignclient.RxNormClient;
 import com.kelley.medicationassistant.model.Medication;
-import com.kelley.medicationassistant.payload.*;
+import com.kelley.medicationassistant.dto.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;

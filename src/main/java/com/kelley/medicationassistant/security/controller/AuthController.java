@@ -2,7 +2,7 @@ package com.kelley.medicationassistant.security.controller;
 
 import com.kelley.medicationassistant.exception.APIException;
 import com.kelley.medicationassistant.model.User;
-import com.kelley.medicationassistant.payload.UserResponse;
+import com.kelley.medicationassistant.dto.UserResponse;
 import com.kelley.medicationassistant.repository.UserRepository;
 import com.kelley.medicationassistant.security.payload.LoginRequest;
 import com.kelley.medicationassistant.security.payload.LoginResponse;

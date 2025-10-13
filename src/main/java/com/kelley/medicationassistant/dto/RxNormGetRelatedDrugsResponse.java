@@ -1,4 +1,4 @@
-package com.kelley.medicationassistant.payload;
+package com.kelley.medicationassistant.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;

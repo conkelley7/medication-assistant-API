@@ -1,4 +1,4 @@
-package com.kelley.medicationassistant.payload;
+package com.kelley.medicationassistant.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;

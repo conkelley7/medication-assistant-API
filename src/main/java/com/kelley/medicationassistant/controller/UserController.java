@@ -1,7 +1,7 @@
 package com.kelley.medicationassistant.controller;
 
-import com.kelley.medicationassistant.payload.SignUpRequest;
-import com.kelley.medicationassistant.payload.UserResponse;
+import com.kelley.medicationassistant.dto.SignUpRequest;
+import com.kelley.medicationassistant.dto.UserResponse;
 import com.kelley.medicationassistant.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;

@@ -1,7 +1,7 @@
 package com.kelley.medicationassistant.feignclient;
 
-import com.kelley.medicationassistant.payload.RxNormGetDrugsResponse;
-import com.kelley.medicationassistant.payload.RxNormGetRelatedDrugsResponse;
+import com.kelley.medicationassistant.dto.RxNormGetDrugsResponse;
+import com.kelley.medicationassistant.dto.RxNormGetRelatedDrugsResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;

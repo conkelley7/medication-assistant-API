@@ -1,8 +1,8 @@
 package com.kelley.medicationassistant.feignclient;
 
 import com.kelley.medicationassistant.config.AppConfig;
-import com.kelley.medicationassistant.payload.OpenAiRequest;
-import com.kelley.medicationassistant.payload.OpenAiResponse;
+import com.kelley.medicationassistant.dto.OpenAiRequest;
+import com.kelley.medicationassistant.dto.OpenAiResponse;
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
