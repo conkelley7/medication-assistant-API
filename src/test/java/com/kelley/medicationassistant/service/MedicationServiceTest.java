@@ -4,7 +4,7 @@ import com.kelley.medicationassistant.feignclient.OpenAiClient;
 import com.kelley.medicationassistant.feignclient.RxNormClient;
 import com.kelley.medicationassistant.model.Medication;
 import com.kelley.medicationassistant.model.MedicationChatOption;
-import com.kelley.medicationassistant.payload.*;
+import com.kelley.medicationassistant.dto.*;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

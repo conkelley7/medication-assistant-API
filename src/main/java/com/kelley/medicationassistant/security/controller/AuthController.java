@@ -2,7 +2,7 @@ package com.kelley.medicationassistant.security.controller;
 
 import com.kelley.medicationassistant.exception.APIException;
 import com.kelley.medicationassistant.model.User;
-import com.kelley.medicationassistant.payload.UserResponse;
+import com.kelley.medicationassistant.dto.UserResponse;
 import com.kelley.medicationassistant.repository.UserRepository;
 import com.kelley.medicationassistant.security.payload.LoginRequest;
 import com.kelley.medicationassistant.security.payload.LoginResponse;
@@ -20,13 +20,17 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+// TODO - move to single controller package
 
 /**
  * AuthController is responsible for handling user authentication and related operations
  * such as logging in and retrieving the current logged-in user's details.
+ *
+ * See {@link com.kelley.medicationassistant.controller.UserController} for endpoints regarding user creation / deletion,
+ * which update DB records and interact with service layer.
  */
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping( "/api/v1/user/auth" )
 public class AuthController {
 
     private final JwtService jwtService;
@@ -35,9 +39,8 @@ public class AuthController {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public AuthController(JwtService jwtService, AuthenticationManager authenticationManager,
-                          UserDetailsServiceImpl userDetailsService, UserRepository userRepository,
-                          ModelMapper modelMapper) {
+    public AuthController( JwtService jwtService, AuthenticationManager authenticationManager, UserDetailsServiceImpl userDetailsService,
+                           UserRepository userRepository, ModelMapper modelMapper ) {
         this.jwtService = jwtService;
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
@@ -52,50 +55,51 @@ public class AuthController {
      * @return ResponseEntity containing LoginResponse DTO (username and status), and JWT token.
      * @throws APIException if neither username nor email is provided in the request.
      */
-    @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest loginRequest) {
-        if (loginRequest.getUsername() == null && loginRequest.getEmail() == null)
-            throw new APIException("Login request must contain either a username or an email");
+    @PostMapping( "/login" )
+    public ResponseEntity<LoginResponse> login( @Valid @RequestBody LoginRequest loginRequest ) {
+
+        if ( loginRequest.getUsername( ) == null && loginRequest.getEmail( ) == null ) {
+            throw new APIException( "Login request must contain either a username or an email" );
+        }
 
         UserDetails userDetails;
         // Set userDetails based on the choice of login method (username or email)
-        if (loginRequest.getUsername() != null) {
-            userDetails = userDetailsService.loadUserByUsername(loginRequest.getUsername());
+        if ( loginRequest.getUsername( ) != null ) {
+            userDetails = userDetailsService.loadUserByUsername( loginRequest.getUsername( ) );
         } else {
-            userDetails = userDetailsService.loadUserByEmail(loginRequest.getEmail());
+            userDetails = userDetailsService.loadUserByEmail( loginRequest.getEmail( ) );
         }
 
         UsernamePasswordAuthenticationToken credentials = new UsernamePasswordAuthenticationToken(
-                loginRequest.getUsername() != null ? loginRequest.getUsername() : loginRequest.getEmail(),
-                loginRequest.getPassword()
+                loginRequest.getUsername( ) != null ? loginRequest.getUsername( ) : loginRequest.getEmail( ),
+                loginRequest.getPassword( )
         );
-        Authentication auth = authenticationManager.authenticate(credentials);
+        authenticationManager.authenticate( credentials );
 
-        String jwt = jwtService.generateToken(userDetails);
-        LoginResponse loginResponse = new LoginResponse(
-                "success",
-                userDetails.getUsername()
-        );
+        String jwt = jwtService.generateToken( userDetails );
+        LoginResponse loginResponse = new LoginResponse("success", userDetails.getUsername( ) );
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.AUTHORIZATION, "Bearer " + jwt)
-                .body(loginResponse);
+        return ResponseEntity.ok( )
+                             .header( HttpHeaders.AUTHORIZATION, "Bearer " + jwt )
+                             .body( loginResponse );
     }
 
     /**
      * Retrieves the details of the currently authenticated user.
      *
-     * @return ResponseEntity containing the user's details as a UserResponse DTO.
+     * @return ResponseEntity containing the user's details as a UserResponse DTO with 200 OK status.
      * @throws APIException if no authenticated user is found in the security context.
      */
-    @GetMapping("/current")
-    public ResponseEntity<UserResponse> getCurrentLoggedInUser() {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(auth.getName())
-                .orElseThrow(() -> new APIException("No logged in user found"));
+    @GetMapping( "/current-user" )
+    public ResponseEntity<UserResponse> getCurrentLoggedInUser( ) {
 
-        UserResponse response = modelMapper.map(user, UserResponse.class);
+        Authentication auth = SecurityContextHolder.getContext( ).getAuthentication( );
+        User user = userRepository.findByUsername( auth.getName( ) )
+                .orElseThrow( ( ) -> new APIException( "No logged in user found" ) );
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        UserResponse response = modelMapper.map( user, UserResponse.class );
+
+        return new ResponseEntity<>( response, HttpStatus.OK );
+
     }
 }

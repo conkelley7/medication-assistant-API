@@ -1,6 +1,6 @@
 package com.kelley.medicationassistant.exception;
 
-import com.kelley.medicationassistant.payload.APIResponse;
+import com.kelley.medicationassistant.dto.APIResponse;
 import feign.FeignException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    private final Logger globalExceptionLogger = LoggerFactory.getLogger(GlobalExceptionHandler.class);
+    private final Logger globalExceptionLogger = LoggerFactory.getLogger( GlobalExceptionHandler.class );
 
     /**
      * Handles API-specific exceptions (APIException) and provides a structured error response.
@@ -25,14 +25,14 @@ public class GlobalExceptionHandler {
      *
      * @param e The APIException that was thrown.
      * @param request The HTTP request that triggered the exception, used to capture the URI.
-     * @return ResponseEntity containing the error response and appropriate HTTP status (BAD_REQUEST).
+     * @return ResponseEntity containing the error response and 400 BAD REQUEST.
      */
-    @ExceptionHandler(APIException.class)
-    public ResponseEntity<APIResponse> handleAPIException(APIException e, HttpServletRequest request) {
-        APIResponse apiResponse = new APIResponse(
-                e.getMessage(),
-                request.getRequestURI());
-        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
+    @ExceptionHandler( APIException.class )
+    public ResponseEntity<APIResponse> handleAPIException( APIException e, HttpServletRequest request ) {
+
+        APIResponse apiResponse = new APIResponse( e.getMessage( ), request.getRequestURI( ) );
+        return new ResponseEntity<>( apiResponse, HttpStatus.BAD_REQUEST );
+
     }
 
     /**
@@ -41,17 +41,18 @@ public class GlobalExceptionHandler {
      *
      * @param e The FeignException that was thrown.
      * @param request The HTTP request that triggered the exception, used to capture the URI.
-     * @return ResponseEntity containing a generic error message and HTTP status (INTERNAL_SERVER_ERROR).
+     * @return ResponseEntity containing a generic error message and 500 INTERNAL SERVER ERROR
      */
-    @ExceptionHandler(FeignException.class)
+    @ExceptionHandler( FeignException.class )
     public ResponseEntity<APIResponse> handleFeignException(FeignException e, HttpServletRequest request) {
 
-        globalExceptionLogger.error("Feign Error on Path {}: {}", request.getRequestURI(), e.getMessage());
+        globalExceptionLogger.error( "Feign Error on Path {}: {}", request.getRequestURI( ), e.getMessage( ) );
 
         APIResponse apiResponse = new APIResponse(
                 "An unexpected error has occurred. Please try again later.",
-                request.getRequestURI()
+                request.getRequestURI( )
         );
-        return new ResponseEntity<>(apiResponse, HttpStatus.INTERNAL_SERVER_ERROR);
+        return new ResponseEntity<>( apiResponse, HttpStatus.INTERNAL_SERVER_ERROR );
+
     }
 }

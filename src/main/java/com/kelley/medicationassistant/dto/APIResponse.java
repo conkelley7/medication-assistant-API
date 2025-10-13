@@ -1,9 +1,10 @@
-package com.kelley.medicationassistant.payload;
+package com.kelley.medicationassistant.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+// TODO rename
 /**
  * Wrapper class for Exception Handling
  * See {@link com.kelley.medicationassistant.exception.GlobalExceptionHandler}

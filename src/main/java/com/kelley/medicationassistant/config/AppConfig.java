@@ -16,19 +16,24 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class AppConfig {
 
-    @Value("${spring.ai.openai.api-key}")
+    // TO DO
+    @Value( "${spring.ai.openai.api-key}" )
     private String apiKey;
 
     @Bean
-    public RequestInterceptor authInterceptor() {
+    public RequestInterceptor authInterceptor( ) {
+
         return requestTemplate -> {
-                requestTemplate.header("Authorization", "Bearer " + apiKey);
-                requestTemplate.header("Content-Type", "application/json");
+                requestTemplate.header( "Authorization", "Bearer " + apiKey );
+                requestTemplate.header( "Content-Type", "application/json" );
         };
+
     }
 
     @Bean
-    public ModelMapper modelMapper() {
-        return new ModelMapper();
+    public ModelMapper modelMapper( ) {
+
+        return new ModelMapper( );
+
     }
 }

@@ -19,13 +19,13 @@ import java.util.Date;
  */
 @Service
 public class JwtService {
-    private static final Logger jwtLogger = LoggerFactory.getLogger(JwtService.class);
+    private static final Logger jwtLogger = LoggerFactory.getLogger( JwtService.class );
 
     // 1 Day in MS - should be shorter in a production environment
     private final long EXPIRATION_TIME = 86400000;
 
     // Pulls secret key from application.properties - make sure it is defined
-    @Value("${medicationassistant.jwtsecret}")
+    @Value( "${medicationassistant.jwtsecret}" )
     private String jwtSecret;
 
     /**
@@ -34,13 +34,15 @@ public class JwtService {
      * @param userDetails the UserDetails object containing the user's information
      * @return JWT string representing the user's authentication token
      */
-    public String generateToken(UserDetails userDetails) {
-        return Jwts.builder()
-                .subject(userDetails.getUsername())
-                .issuedAt(new Date())
-                .expiration(new Date(new Date().getTime() + EXPIRATION_TIME))
-                .signWith(key())
-                .compact();
+    public String generateToken( UserDetails userDetails ) {
+
+        return Jwts.builder( )
+                .subject( userDetails.getUsername( ) )
+                .issuedAt( new Date( ) )
+                .expiration( new Date( new Date( ).getTime( ) + EXPIRATION_TIME ) )
+                .signWith( key( ) )
+                .compact( );
+
     }
 
     /**
@@ -48,8 +50,8 @@ public class JwtService {
      *
      * @return Key object representing the secret key.
      */
-    private Key key() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtSecret));
+    private Key key( ) {
+        return Keys.hmacShaKeyFor( Decoders.BASE64.decode( jwtSecret ) );
     }
 
     /**
@@ -58,13 +60,15 @@ public class JwtService {
      * @param token the JWT token string from which username is to be extracted
      * @return String containing username (subject) from JWT
      */
-    public String getUsernameFromJwtToken(String token) {
-        return Jwts.parser()
-                .verifyWith((SecretKey) key())
-                .build()
-                .parseSignedClaims(token)
-                .getPayload()
-                .getSubject();
+    public String getUsernameFromJwtToken( String token ) {
+
+        return Jwts.parser( )
+                .verifyWith( ( SecretKey ) key( ) )
+                .build( )
+                .parseSignedClaims( token )
+                .getPayload( )
+                .getSubject( );
+
     }
 
     /**
@@ -73,18 +77,20 @@ public class JwtService {
      * @param token JWT token to be validated
      * @return boolean based on whether or not the token is valid
      */
-    public boolean validateJwtToken(String token) {
+    public boolean validateJwtToken( String token ) {
+
         try {
-            Jwts.parser()
-                    .verifyWith((SecretKey) key())
-                    .build()
-                    .parseSignedClaims(token);
+            Jwts.parser( )
+                    .verifyWith( ( SecretKey ) key( ) )
+                    .build( )
+                    .parseSignedClaims( token );
             // Return true if valid (no exceptions thrown)
             return true;
-        } catch (JwtException e) {
+        } catch ( JwtException e ) {
             // If there is an issue with the JWT, log and return false
-            jwtLogger.error(e.getMessage());
+            jwtLogger.error(e.getMessage( ) );
             return false;
         }
+
     }
 }

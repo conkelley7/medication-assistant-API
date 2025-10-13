@@ -10,13 +10,13 @@ import lombok.Getter;
  */
 @Getter
 public enum MedicationChatOption {
-    GENERAL_INFORMATION("general information"),
-    DOSAGE("dosage"),
-    SIDE_EFFECTS("potential side effects");
+    GENERAL_INFORMATION( "general information" ),
+    DOSAGE( "dosage" ),
+    SIDE_EFFECTS( "potential side effects" );
 
     private final String value;
 
-    MedicationChatOption(String value) {
+    MedicationChatOption( String value ) {
         this.value = value;
     }
 

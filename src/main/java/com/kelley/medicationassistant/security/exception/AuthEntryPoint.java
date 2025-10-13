@@ -21,7 +21,7 @@ import java.util.HashMap;
 @Component
 public class AuthEntryPoint implements AuthenticationEntryPoint {
 
-    private final Logger authExceptionLogger = LoggerFactory.getLogger(AuthEntryPoint.class);
+    private final Logger authExceptionLogger = LoggerFactory.getLogger( AuthEntryPoint.class );
 
     /**
      * Handles unauthorized access attempts to protected resources by providing an HTTP 401 Unauthorized response.
@@ -30,19 +30,19 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
      *
      */
     @Override
-    public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        authExceptionLogger.error("Unauthorized error: {}", authException.getMessage());
+    public void commence( HttpServletRequest request, HttpServletResponse response, AuthenticationException authException ) throws IOException, ServletException {
+        authExceptionLogger.error( "Unauthorized error: {}", authException.getMessage( ) );
 
-        response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+        response.setContentType( MediaType.APPLICATION_JSON_VALUE );
+        response.setStatus( HttpServletResponse.SC_UNAUTHORIZED );
 
-        Map<String, Object> body = new HashMap<>();
-        body.put("status", HttpServletResponse.SC_UNAUTHORIZED);
-        body.put("error", "Unauthorized");
-        body.put("message", authException.getMessage());
-        body.put("path", request.getServletPath());
+        Map<String, Object> body = new HashMap<>( );
+        body.put( "status", HttpServletResponse.SC_UNAUTHORIZED );
+        body.put( "error", "Unauthorized" );
+        body.put( "message", authException.getMessage( ) );
+        body.put( "path", request.getServletPath( ) );
 
-        final ObjectMapper mapper = new ObjectMapper();
-        mapper.writeValue(response.getOutputStream(), body);
+        final ObjectMapper mapper = new ObjectMapper( );
+        mapper.writeValue( response.getOutputStream( ), body );
     }
 }
