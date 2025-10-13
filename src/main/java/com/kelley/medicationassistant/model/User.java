@@ -14,19 +14,19 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "users", uniqueConstraints = {
-        @UniqueConstraint(columnNames = "username"),
-        @UniqueConstraint(columnNames = "email")
-})
+@Table( name = "users", uniqueConstraints = {
+        @UniqueConstraint( columnNames = "username" ),
+        @UniqueConstraint( columnNames = "email" )
+} )
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue( strategy = GenerationType.IDENTITY )
     private Long userId;
 
     private String username;
     private String password;
     private String email;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany( mappedBy = "user", fetch = FetchType.LAZY, cascade = CascadeType.ALL )
     private List<Search> searches;
 }
