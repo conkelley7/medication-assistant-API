@@ -7,6 +7,8 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+// TODO move to rxnorm dto package
+
 /**
  * Follows expected formatting for 'getDrugs' response from RxNorm API.
  */

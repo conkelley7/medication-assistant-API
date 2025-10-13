@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
+// TODO move to openai dto package package
 /**
  * Format specified for responses from OpenAI API.
  */

@@ -17,7 +17,7 @@ public interface MedicationService {
      * @param pageable pagination details
      * @return Page containing paginated Medication search results
      */
-    Page<Medication> search(String query, Pageable pageable);
+    Page<Medication> search( String query, Pageable pageable );
 
     /**
      * Retrieve a response from an AI chatbot given a medication name and the type of information desired (general
@@ -26,7 +26,7 @@ public interface MedicationService {
      * @param request {@link PromptRequest} DTO containing details for the information requests
      * @return {@link PromptResponse} DTO containing message from AI provider
      */
-    PromptResponse getInformation(PromptRequest request);
+    PromptResponse getInformation( PromptRequest request );
 
     /**
      * Given an rxcui of a drug (obtained from 'search' method), this method will return a paginated
@@ -36,5 +36,5 @@ public interface MedicationService {
      * @param pageable pagination details
      * @return Page containing paginated related Medication search results
      */
-    Page<Medication> getRelated(String rxcui, Pageable pageable);
+    Page<Medication> getRelated( String rxcui, Pageable pageable );
 }

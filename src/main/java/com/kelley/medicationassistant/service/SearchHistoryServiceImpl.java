@@ -16,15 +16,15 @@ import org.springframework.stereotype.Service;
  * Implementation of SearchHistoryService interface
  */
 @Service
-public class SearchHistoryServiceImpl implements SearchHistoryService{
+public class SearchHistoryServiceImpl implements SearchHistoryService {
 
     private final SearchHistoryRepository searchHistoryRepository;
     private final UserRepository userRepository;
     private final AuthUtil authUtil;
     private final ModelMapper modelMapper;
 
-    public SearchHistoryServiceImpl(SearchHistoryRepository searchHistoryRepository, UserRepository userRepository,
-                                    AuthUtil authUtil, ModelMapper modelMapper) {
+    public SearchHistoryServiceImpl( SearchHistoryRepository searchHistoryRepository, UserRepository userRepository,
+                                    AuthUtil authUtil, ModelMapper modelMapper ) {
         this.searchHistoryRepository = searchHistoryRepository;
         this.userRepository = userRepository;
         this.authUtil = authUtil;
@@ -32,32 +32,34 @@ public class SearchHistoryServiceImpl implements SearchHistoryService{
     }
 
     @Override
-    public SearchDTO addQueryToSearchHistory(String query) {
-        Search search = new Search();
-        search.setUser(authUtil.getLoggedInUser());
-        search.setSearchQuery(query);
+    public SearchDTO addQueryToSearchHistory( String query ) {
 
-        Search savedSearch = searchHistoryRepository.save(search);
+        Search search = new Search( );
+        search.setUser( authUtil.getLoggedInUser( ) );
+        search.setSearchQuery( query );
 
-        return modelMapper.map(savedSearch, SearchDTO.class);
+        Search savedSearch = searchHistoryRepository.save( search );
+
+        return modelMapper.map( savedSearch, SearchDTO.class );
+
     }
 
     @Override
-    public Page<SearchDTO> getSearchHistoryByUser(User user, Pageable pageable) {
+    public Page<SearchDTO> getSearchHistoryByUser( User user, Pageable pageable ) {
 
-        Page<Search> searchHistoryPage = searchHistoryRepository.findAllByUser(user, pageable);
+        Page<Search> searchHistoryPage = searchHistoryRepository.findAllByUser( user, pageable );
 
-        return searchHistoryPage.map(entity -> modelMapper.map(entity, SearchDTO.class));
+        return searchHistoryPage.map( entity -> modelMapper.map( entity, SearchDTO.class ) );
     }
 
     @Override
-    public Page<SearchDTO> getSearchHistoryByUserId(Long userId, Pageable pageable) {
+    public Page<SearchDTO> getSearchHistoryByUserId( Long userId, Pageable pageable ) {
 
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new APIException("User not found with ID: " + userId));
+        User user = userRepository.findById( userId )
+                .orElseThrow( ( ) -> new APIException( "User not found with ID: " + userId ) );
 
-        Page<Search> searchHistoryPage = searchHistoryRepository.findAllByUser(user, pageable);
+        Page<Search> searchHistoryPage = searchHistoryRepository.findAllByUser( user, pageable );
 
-        return searchHistoryPage.map(entity -> modelMapper.map(entity, SearchDTO.class));
+        return searchHistoryPage.map( entity -> modelMapper.map(entity, SearchDTO.class ) );
     }
 }

@@ -14,30 +14,34 @@ public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ModelMapper modelMapper;
 
-    public UserServiceImpl(UserRepository userRepository, ModelMapper modelMapper) {
+    public UserServiceImpl( UserRepository userRepository, ModelMapper modelMapper ) {
         this.userRepository = userRepository;
         this.modelMapper = modelMapper;
     }
 
     @Override
-    public UserResponse signUp(SignUpRequest signUpRequest) {
-        User user = new User();
-        user.setUsername(signUpRequest.getUsername());
-        user.setPassword(signUpRequest.getPassword());
-        user.setEmail(signUpRequest.getEmail());
+    public UserResponse signUp( SignUpRequest signUpRequest ) {
 
-        userRepository.save(user);
+        User user = new User( );
+        user.setUsername( signUpRequest.getUsername( ) );
+        user.setPassword( signUpRequest.getPassword( ) );
+        user.setEmail( signUpRequest.getEmail( ) );
 
-        return modelMapper.map(user, UserResponse.class);
+        userRepository.save( user );
+
+        return modelMapper.map( user, UserResponse.class );
+
     }
 
     @Override
-    public UserResponse deleteUserByUsername(String username) {
-        User user = userRepository.findByUsername(username)
-                .orElseThrow(() -> new APIException("User not found with username: " + username));
+    public UserResponse deleteUserByUsername( String username ) {
 
-        userRepository.delete(user);
+        User user = userRepository.findByUsername( username )
+                .orElseThrow( ( ) -> new APIException( "User not found with username: " + username ) );
 
-        return modelMapper.map(user, UserResponse.class);
+        userRepository.delete( user );
+
+        return modelMapper.map( user, UserResponse.class );
+
     }
 }

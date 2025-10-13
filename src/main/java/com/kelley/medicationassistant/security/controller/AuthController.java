@@ -20,6 +20,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 
+// TODO - move to single controller package
 
 /**
  * AuthController is responsible for handling user authentication and related operations

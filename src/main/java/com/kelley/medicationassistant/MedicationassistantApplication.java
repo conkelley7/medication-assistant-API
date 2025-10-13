@@ -7,11 +7,11 @@ import org.springframework.data.web.config.EnableSpringDataWebSupport;
 
 @SpringBootApplication
 @EnableFeignClients
-@EnableSpringDataWebSupport(pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO)
+@EnableSpringDataWebSupport( pageSerializationMode = EnableSpringDataWebSupport.PageSerializationMode.VIA_DTO )
 public class MedicationassistantApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(MedicationassistantApplication.class, args);
+	public static void main( String[] args ) {
+		SpringApplication.run( MedicationassistantApplication.class, args );
 	}
 
 }

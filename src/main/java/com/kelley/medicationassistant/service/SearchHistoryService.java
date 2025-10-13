@@ -17,7 +17,7 @@ public interface SearchHistoryService {
      * @param query the user's query to be saved
      * @return SearchDTO object with saved Search details
      */
-    SearchDTO addQueryToSearchHistory(String query);
+    SearchDTO addQueryToSearchHistory( String query );
 
     /**
      * Retrieves search history for a given user
@@ -26,7 +26,7 @@ public interface SearchHistoryService {
      * @param pageable pagination parameters
      * @return page of search history DTO objects
      */
-    Page<SearchDTO> getSearchHistoryByUser(User user, Pageable pageable);
+    Page<SearchDTO> getSearchHistoryByUser( User user, Pageable pageable );
 
     /**
      * Retrieves search history for a user given a user ID
@@ -35,5 +35,5 @@ public interface SearchHistoryService {
      * @param pageable pagination parameters
      * @return page of search history DTO objects
      */
-    Page<SearchDTO> getSearchHistoryByUserId(Long userId, Pageable pageable);
+    Page<SearchDTO> getSearchHistoryByUserId( Long userId, Pageable pageable );
 }
