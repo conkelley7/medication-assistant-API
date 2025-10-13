@@ -12,5 +12,7 @@ import org.springframework.stereotype.Repository;
  */
 @Repository
 public interface SearchHistoryRepository extends JpaRepository<Search, Long> {
-    Page<Search> findAllByUser(User user, Pageable pageable);
+
+    Page<Search> findAllByUser( User user, Pageable pageable );
+
 }
