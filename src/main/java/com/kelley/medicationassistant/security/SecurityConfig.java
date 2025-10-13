@@ -11,6 +11,8 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,8 +33,8 @@ public class SecurityConfig {
     private final AuthEntryPoint authEntryPoint;
     private final UserRepository userRepository;
 
-    public SecurityConfig(AuthTokenFilter authTokenFilter, AuthEntryPoint authEntryPoint,
-                          UserRepository userRepository) {
+    public SecurityConfig( AuthTokenFilter authTokenFilter, AuthEntryPoint authEntryPoint,
+                          UserRepository userRepository ) {
         this.authTokenFilter = authTokenFilter;
         this.authEntryPoint = authEntryPoint;
         this.userRepository = userRepository;
@@ -43,53 +45,52 @@ public class SecurityConfig {
      * besides signup and login.
      */
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain filterChain( HttpSecurity http ) throws Exception {
         http
-                .csrf(csrf -> csrf.disable())
-                .headers(headers ->
-                        headers.frameOptions(frameOptions -> frameOptions.sameOrigin()))
-                .exceptionHandling(e -> e.authenticationEntryPoint(authEntryPoint))
-                .sessionManagement(sess ->
-                        sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .csrf( AbstractHttpConfigurer::disable )
+                .headers(headers -> headers.frameOptions( HeadersConfigurer.FrameOptionsConfig::sameOrigin) )
+                .exceptionHandling(e -> e.authenticationEntryPoint( authEntryPoint ) )
+                .sessionManagement(sess -> sess.sessionCreationPolicy(SessionCreationPolicy.STATELESS ) )
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/api/v1/auth/**").permitAll()
-                        .requestMatchers("/api/v1/user/signup").permitAll()
-                        .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().authenticated()
+                        .requestMatchers( "/api/v1/user/auth/login" ).permitAll( )
+                        .requestMatchers( "/api/v1/user/signup" ).permitAll( )
+                        .requestMatchers( "/h2-console/**" ).permitAll( )
+                        .anyRequest( ).authenticated( )
                 );
 
-        http.addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class);
-        return http.build();
+        http.addFilterBefore( authTokenFilter, UsernamePasswordAuthenticationFilter.class );
+        return http.build( );
     }
 
     /**
      * Provides the AuthenticationManager bean to be used for authentication.
      */
     @Bean
-    public AuthenticationManager authenticationManager(AuthenticationConfiguration authConfig) throws Exception {
-        return authConfig.getAuthenticationManager();
+    public AuthenticationManager authenticationManager( AuthenticationConfiguration authConfig ) throws Exception {
+        return authConfig.getAuthenticationManager( );
     }
 
     /**
      * Provides bean for encoding passwords when saving to database.
      */
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public PasswordEncoder passwordEncoder( ) {
         return new BCryptPasswordEncoder();
     }
 
     /**
      * Add a default user at runtime for ease of testing.
      */
+    // TODO move out of security config so I can add other init data too
     @Bean
-    public CommandLineRunner initData(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public CommandLineRunner initData( UserRepository userRepository, PasswordEncoder passwordEncoder ) {
         return args -> {
-            if (!userRepository.existsByUsername("DefaultUser")) {
-                User user = new User();
-                user.setUsername("DefaultUser");
-                user.setPassword(passwordEncoder.encode("default123"));
-                user.setEmail("defaultuser@example.com");
-                userRepository.save(user);
+            if ( !userRepository.existsByUsername("DefaultUser" ) ) {
+                User user = new User( );
+                user.setUsername( "DefaultUser" );
+                user.setPassword( passwordEncoder.encode( "default123" ) );
+                user.setEmail( "defaultuser@example.com" );
+                userRepository.save( user );
             }
         };
     }

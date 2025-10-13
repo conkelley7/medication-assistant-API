@@ -12,6 +12,7 @@ import org.springframework.security.web.AuthenticationEntryPoint;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Map;
 import java.util.HashMap;
 
@@ -31,7 +32,8 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
      */
     @Override
     public void commence( HttpServletRequest request, HttpServletResponse response, AuthenticationException authException ) throws IOException, ServletException {
-        authExceptionLogger.error( "Unauthorized error: {}", authException.getMessage( ) );
+
+        authExceptionLogger.error( "Unauthorized error: {}", ( authException.toString(  ) ) );
 
         response.setContentType( MediaType.APPLICATION_JSON_VALUE );
         response.setStatus( HttpServletResponse.SC_UNAUTHORIZED );
@@ -44,5 +46,6 @@ public class AuthEntryPoint implements AuthenticationEntryPoint {
 
         final ObjectMapper mapper = new ObjectMapper( );
         mapper.writeValue( response.getOutputStream( ), body );
+
     }
 }

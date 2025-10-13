@@ -30,9 +30,8 @@ public class MedicationController {
      * @param pageable allows for pagination variables
      * @return ResponseEntity with page of medications, and 200 OK status.
      */
-    // TODO Switch query to path variable
     @GetMapping( "/search" )
-    public ResponseEntity<Page<Medication>> search( @RequestParam String query, Pageable pageable ) {
+    public ResponseEntity<Page<Medication>> search( @PathVariable String query, Pageable pageable ) {
 
         Page< Medication > response = medicationService.search( query, pageable );
         return new ResponseEntity<>( response, HttpStatus.OK );

@@ -58,7 +58,7 @@ public class MedicationServiceImpl implements MedicationService {
             throw new APIException( "Search returned no results" );
         }
 
-        List<Medication> allMedications = conceptGroupList
+        List<Medication> allMedicationList = conceptGroupList
                 .stream( )
                 .filter( conceptGroup -> conceptGroup.getConceptProperties( ) != null )
                 .flatMap( conceptGroup -> conceptGroup.getConceptProperties( ).stream( ) )
@@ -67,29 +67,7 @@ public class MedicationServiceImpl implements MedicationService {
                         conceptProperty.getRxcui( )
                 ) ).toList( );
 
-        // TODO extract below into single helper method
-        // Total number of medications fetched from RxNorm
-        int total = allMedications.size( );
-
-        /*
-          Calculate start and end index based on page and size
-        */
-
-        // page 1, size 10 => offset 10
-        int start = ( int ) pageable.getOffset( );
-
-        int end = Math.min( start + ( pageable.getPageSize( ) ), total );
-
-        // If requested start point is greater than total medication count, return empty page
-        if ( start > end ) {
-            return new PageImpl<>( Collections.emptyList( ), pageable, total );
-        }
-
-        // Construct a sublist of items for the requested page
-        List<Medication> medications = allMedications.subList( start, end );
-
-        return new PageImpl<>( medications, pageable, total );
-
+        return constructPaginatedMedicationResponseList( allMedicationList, pageable );
 
     }
 
@@ -151,23 +129,7 @@ public class MedicationServiceImpl implements MedicationService {
                         .toList( );
 
 
-        // Calculate and implement pagination details (RxNorm API does not allow pagination)
-
-        // TODO extract below into single helper method
-
-        int total = allMedicationList.size( );
-
-        int start = (int) pageable.getOffset( );
-        int end = Math.min( start + pageable.getPageSize( ), total );
-
-        // If requested start point is greater than total medication count, return empty page
-        if ( start > end ) {
-            return new PageImpl<>( Collections.emptyList( ), pageable, end );
-        }
-
-        List<Medication> paginatedMedicationList = allMedicationList.subList( start, end );
-
-        return new PageImpl<>( paginatedMedicationList, pageable, total );
+        return constructPaginatedMedicationResponseList( allMedicationList, pageable);
 
     }
 
@@ -180,6 +142,31 @@ public class MedicationServiceImpl implements MedicationService {
     private String constructPromptFromPromptRequest( PromptRequest request ) {
 
         return request.getMedicationName( ) + " " + request.getMedicationChatOption( ).getValue( );
+
+    }
+
+    /**
+     * Helper method to construct a paginated response list for method calling RxNorm API (does not allow pagination)
+     * @param allMedicationList full source list
+     * @param pageable contains requested pagination parameters from controller endpoint
+     * @return Page of {@link Medication} objects
+     */
+    private Page<Medication> constructPaginatedMedicationResponseList( List<Medication> allMedicationList, Pageable pageable ) {
+
+        // Calculate and implement pagination details (RxNorm API does not allow pagination)
+        int total = allMedicationList.size( );
+        int start = ( int ) pageable.getOffset( );
+        int end = Math.min( start + pageable.getPageSize( ), total );
+
+        // If requested start point is greater than total medication count, return empty page
+        if ( start > end ) {
+            return new PageImpl<>( Collections.emptyList( ), pageable, total );
+        }
+
+        // Construct a sublist of items for the requested page
+        List<Medication> medications = allMedicationList.subList( start, end );
+
+        return new PageImpl<>( medications, pageable, total );
 
     }
 
