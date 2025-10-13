@@ -14,12 +14,12 @@ import org.springframework.web.bind.annotation.*;
  * Rest Controller class, exposes API endpoints relating to medication searches and chat queries.
  */
 @RestController
-@RequestMapping("/api/v1/medication")
+@RequestMapping( "/api/v1/medication" )
 public class MedicationController {
 
     private final MedicationService medicationService;
 
-    public MedicationController(MedicationService medicationService) {
+    public MedicationController( MedicationService medicationService ) {
         this.medicationService = medicationService;
     }
 
@@ -27,21 +27,31 @@ public class MedicationController {
      * Exposes an endpoint for looking up medications using RxNorm API.
      *
      * @param query Medication search query, passed to RxNorm.
-     * @param pageable pagination variables (Spring handles serialization into Pageable object).
-     * @return ResponseEntity with a Page of {@link Medication} found during the search, and 200 OK status.
+     * @param pageable allows for pagination variables
+     * @return ResponseEntity with page of medications, and 200 OK status.
      */
-    @GetMapping("/search")
-    public ResponseEntity<Page<Medication>> search(@RequestParam String query,
-                                                   Pageable pageable) {
-        Page<Medication> response = medicationService.search(query, pageable);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    // TODO Switch query to path variable
+    @GetMapping( "/search" )
+    public ResponseEntity<Page<Medication>> search( @RequestParam String query, Pageable pageable ) {
+
+        Page< Medication > response = medicationService.search( query, pageable );
+        return new ResponseEntity<>( response, HttpStatus.OK );
+
     }
 
-    @GetMapping("/related/{rxcui}")
-    public ResponseEntity<Page<Medication>> getRelated(@PathVariable String rxcui,
-                                                       Pageable pageable) {
-        Page<Medication> response = medicationService.getRelated(rxcui, pageable);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    /**
+     * Exposes endpoint for looking up related medications from a Medication's rxcui code
+     *
+     * @param rxcui for which you would like to look up related medications
+     * @param pageable allows for pagination variables
+     * @return ResponseEntity with page of medications, and 200 OK status
+     */
+    @GetMapping( "/related/{rxcui}" )
+    public ResponseEntity<Page<Medication>> getRelated( @PathVariable String rxcui, Pageable pageable ) {
+
+        Page<Medication> response = medicationService.getRelated( rxcui, pageable );
+        return new ResponseEntity<>( response, HttpStatus.OK );
+
     }
 
     /**
@@ -49,11 +59,13 @@ public class MedicationController {
      * information type selection. See {@link com.kelley.medicationassistant.model.MedicationChatOption}
      *
      * @param request {@link PromptRequest} DTO containing medication name, and desired information option
-     * @return ResponseEntity containing the AI model's response to the inquiry from OpenAI
+     * @return ResponseEntity containing the AI model's response to the inquiry from OpenAI and 200 OK status
      */
-    @PostMapping("/information")
-    public ResponseEntity<PromptResponse> getInformation(@RequestBody PromptRequest request) {
-        PromptResponse response = medicationService.getInformation(request);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    @PostMapping( "/information" )
+    public ResponseEntity<PromptResponse> getInformation( @RequestBody PromptRequest request ) {
+
+        PromptResponse response = medicationService.getInformation( request );
+        return new ResponseEntity<>( response, HttpStatus.OK );
+
     }
 }

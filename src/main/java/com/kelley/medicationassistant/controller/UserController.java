@@ -9,7 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 /**
- * Rest Controller class, exposes API endpoints relating to user operations.
+ * Rest Controller class, exposes API endpoints relating to user operations that add/delete users from database
+ * See {@link com.kelley.medicationassistant.security.controller.AuthController} for login endpoints (/user/auth).
  */
 @RestController
 @RequestMapping("/api/v1/user")
@@ -17,7 +18,7 @@ public class UserController {
 
     private final UserService userService;
 
-    public UserController(UserService userService) {
+    public UserController( UserService userService ) {
         this.userService = userService;
     }
 
@@ -25,24 +26,28 @@ public class UserController {
      * Handles user registration by processing the sign-up request.
      *
      * @param signUpRequest The sign-up request containing user information.
-     * @return ResponseEntity containing UserResponse DTO (with user information) and HTTP status.
+     * @return ResponseEntity containing UserResponse DTO (with user information) and 201 CREATED status.
      */
-    @PostMapping("/signup")
-    public ResponseEntity<UserResponse> signUp(@RequestBody @Valid SignUpRequest signUpRequest) {
-        UserResponse userResponse = userService.signUp(signUpRequest);
-        return new ResponseEntity<>(userResponse, HttpStatus.CREATED);
+    @PostMapping( "/signup" )
+    public ResponseEntity<UserResponse> signUp( @RequestBody @Valid SignUpRequest signUpRequest ) {
+
+        UserResponse userResponse = userService.signUp( signUpRequest );
+        return new ResponseEntity<>( userResponse, HttpStatus.CREATED );
+
     }
 
     /**
      * Deletes a user based on the provided username.
      *
      * @param username The username of the user to be deleted.
-     * @return ResponseEntity containing the UserResponse DTO (with user information) and HTTP status.
+     * @return ResponseEntity containing the UserResponse DTO (with user information) and 200 OK status.
      */
-    @DeleteMapping("/delete/{username}")
-    public ResponseEntity<UserResponse> deleteUserByUsername(@PathVariable String username) {
-        UserResponse userResponse = userService.deleteUserByUsername(username);
-        return new ResponseEntity<>(userResponse, HttpStatus.OK);
+    @DeleteMapping( "/delete/{username}" )
+    public ResponseEntity<UserResponse> deleteUserByUsername( @PathVariable String username ) {
+
+        UserResponse userResponse = userService.deleteUserByUsername( username );
+        return new ResponseEntity<>( userResponse, HttpStatus.OK );
+
     }
 
 

@@ -26,7 +26,7 @@ import org.springframework.web.bind.annotation.*;
  * such as logging in and retrieving the current logged-in user's details.
  */
 @RestController
-@RequestMapping("/api/v1/auth")
+@RequestMapping("/api/v1/user/auth")
 public class AuthController {
 
     private final JwtService jwtService;
