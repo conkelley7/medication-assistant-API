@@ -1,4 +1,4 @@
-package com.kelley.medicationassistant.dto;
+package com.kelley.medicationassistant.openai.dto;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 
-// TODO move to openai dto package package
 /**
  * Format specified for sending chat requests to OpenAI API.
  */

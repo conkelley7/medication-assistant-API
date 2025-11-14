@@ -1,10 +1,15 @@
 package com.kelley.medicationassistant.service;
 
 import com.kelley.medicationassistant.exception.APIException;
-import com.kelley.medicationassistant.feignclient.OpenAiClient;
-import com.kelley.medicationassistant.feignclient.RxNormClient;
+import com.kelley.medicationassistant.openai.dto.ChatMessage;
+import com.kelley.medicationassistant.openai.feignclient.OpenAiClient;
+import com.kelley.medicationassistant.rxnorm.RxNormClient;
 import com.kelley.medicationassistant.model.Medication;
 import com.kelley.medicationassistant.dto.*;
+import com.kelley.medicationassistant.openai.dto.OpenAiRequest;
+import com.kelley.medicationassistant.openai.dto.OpenAiResponse;
+import com.kelley.medicationassistant.rxnorm.RxNormGetDrugsResponse;
+import com.kelley.medicationassistant.rxnorm.RxNormGetRelatedDrugsResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
