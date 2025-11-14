@@ -1,4 +1,4 @@
-package com.kelley.medicationassistant.dto;
+package com.kelley.medicationassistant.rxnorm;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
@@ -10,21 +10,20 @@ import java.util.List;
 // TODO move to rxnorm dto package
 
 /**
- * Follows expected format for 'getAllRelatedInfo' response from RxNorm API
+ * Follows expected formatting for 'getDrugs' response from RxNorm API.
  */
 @JsonIgnoreProperties( ignoreUnknown = true )
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class RxNormGetRelatedDrugsResponse {
-    private AllRelatedGroup allRelatedGroup;
+@NoArgsConstructor
+public class RxNormGetDrugsResponse {
+    private DrugGroup drugGroup;
 
     @JsonIgnoreProperties( ignoreUnknown = true )
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class AllRelatedGroup {
-        private String rxcui;
+    public static class DrugGroup {
         private List<ConceptGroup> conceptGroup;
     }
 
@@ -33,7 +32,6 @@ public class RxNormGetRelatedDrugsResponse {
     @NoArgsConstructor
     @AllArgsConstructor
     public static class ConceptGroup {
-        private String tty;
         private List<ConceptProperty> conceptProperties;
     }
 
@@ -44,12 +42,5 @@ public class RxNormGetRelatedDrugsResponse {
     public static class ConceptProperty {
         private String rxcui;
         private String name;
-        private String synonym;
-        private String tty;
-        private String language;
-        private String suppress;
-        private String umlscui;
     }
-
-
 }
