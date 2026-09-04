@@ -15,4 +15,4 @@ A Spring Boot RESTful API that integrates with the [RxNorm API](https://lhncbc.n
 - JUnit 5 & Mockito for testing
 - Lombok for boilerplate reduction
 - Docker Compose support
-- Seperate profiles for Prod (Postgres) / Local (H2)
+- Separate profiles for Prod (Postgres) / Local (H2)
