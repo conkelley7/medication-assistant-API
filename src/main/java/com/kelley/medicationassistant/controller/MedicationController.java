@@ -4,6 +4,7 @@ import com.kelley.medicationassistant.model.Medication;
 import com.kelley.medicationassistant.dto.PromptRequest;
 import com.kelley.medicationassistant.dto.PromptResponse;
 import com.kelley.medicationassistant.service.MedicationService;
+import jakarta.validation.Valid;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -31,7 +32,7 @@ public class MedicationController {
      * @return ResponseEntity with page of medications, and 200 OK status.
      */
     @GetMapping( "/search" )
-    public ResponseEntity<Page<Medication>> search( @PathVariable String query, Pageable pageable ) {
+    public ResponseEntity<Page<Medication>> search( @RequestParam String query, Pageable pageable ) {
 
         Page< Medication > response = medicationService.search( query, pageable );
         return new ResponseEntity<>( response, HttpStatus.OK );
@@ -61,7 +62,7 @@ public class MedicationController {
      * @return ResponseEntity containing the AI model's response to the inquiry from OpenAI and 200 OK status
      */
     @PostMapping( "/information" )
-    public ResponseEntity<PromptResponse> getInformation( @RequestBody PromptRequest request ) {
+    public ResponseEntity<PromptResponse> getInformation( @Valid @RequestBody PromptRequest request ) {
 
         PromptResponse response = medicationService.getInformation( request );
         return new ResponseEntity<>( response, HttpStatus.OK );

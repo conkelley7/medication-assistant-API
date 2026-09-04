@@ -19,14 +19,11 @@ import org.springframework.stereotype.Service;
 public class SearchHistoryServiceImpl implements SearchHistoryService {
 
     private final SearchHistoryRepository searchHistoryRepository;
-    private final UserRepository userRepository;
     private final AuthUtil authUtil;
     private final ModelMapper modelMapper;
 
-    public SearchHistoryServiceImpl( SearchHistoryRepository searchHistoryRepository, UserRepository userRepository,
-                                    AuthUtil authUtil, ModelMapper modelMapper ) {
+    public SearchHistoryServiceImpl( SearchHistoryRepository searchHistoryRepository, AuthUtil authUtil, ModelMapper modelMapper ) {
         this.searchHistoryRepository = searchHistoryRepository;
-        this.userRepository = userRepository;
         this.authUtil = authUtil;
         this.modelMapper = modelMapper;
     }
@@ -50,16 +47,5 @@ public class SearchHistoryServiceImpl implements SearchHistoryService {
         Page<Search> searchHistoryPage = searchHistoryRepository.findAllByUser( user, pageable );
 
         return searchHistoryPage.map( entity -> modelMapper.map( entity, SearchDTO.class ) );
-    }
-
-    @Override
-    public Page<SearchDTO> getSearchHistoryByUserId( Long userId, Pageable pageable ) {
-
-        User user = userRepository.findById( userId )
-                .orElseThrow( ( ) -> new APIException( "User not found with ID: " + userId ) );
-
-        Page<Search> searchHistoryPage = searchHistoryRepository.findAllByUser( user, pageable );
-
-        return searchHistoryPage.map( entity -> modelMapper.map(entity, SearchDTO.class ) );
     }
 }

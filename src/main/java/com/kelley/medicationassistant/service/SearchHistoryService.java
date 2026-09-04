@@ -27,13 +27,4 @@ public interface SearchHistoryService {
      * @return page of search history DTO objects
      */
     Page<SearchDTO> getSearchHistoryByUser( User user, Pageable pageable );
-
-    /**
-     * Retrieves search history for a user given a user ID
-     *
-     * @param userId The ID of the user for whom to retrieve search history
-     * @param pageable pagination parameters
-     * @return page of search history DTO objects
-     */
-    Page<SearchDTO> getSearchHistoryByUserId( Long userId, Pageable pageable );
 }

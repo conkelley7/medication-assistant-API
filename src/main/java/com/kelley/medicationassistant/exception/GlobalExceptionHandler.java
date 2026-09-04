@@ -28,7 +28,7 @@ public class GlobalExceptionHandler {
      * @return ResponseEntity containing the error response and 400 BAD REQUEST.
      */
     @ExceptionHandler( APIException.class )
-    public ResponseEntity<APIResponse> handleAPIException( APIException e, HttpServletRequest request ) {
+    public ResponseEntity< APIResponse > handleAPIException( APIException e, HttpServletRequest request ) {
 
         APIResponse apiResponse = new APIResponse( e.getMessage( ), request.getRequestURI( ) );
         return new ResponseEntity<>( apiResponse, HttpStatus.BAD_REQUEST );
@@ -44,7 +44,7 @@ public class GlobalExceptionHandler {
      * @return ResponseEntity containing a generic error message and 500 INTERNAL SERVER ERROR
      */
     @ExceptionHandler( FeignException.class )
-    public ResponseEntity<APIResponse> handleFeignException(FeignException e, HttpServletRequest request) {
+    public ResponseEntity< APIResponse > handleFeignException( FeignException e, HttpServletRequest request ) {
 
         globalExceptionLogger.error( "Feign Error on Path {}: {}", request.getRequestURI( ), e.getMessage( ) );
 
@@ -54,5 +54,34 @@ public class GlobalExceptionHandler {
         );
         return new ResponseEntity<>( apiResponse, HttpStatus.INTERNAL_SERVER_ERROR );
 
+    }
+
+    /**
+     * Handles external service exceptions and logs the error.
+     * Provides a generic error message to the client and returns a 502 Bad Gateway status.
+     *
+     * @param exception The ExternalServiceException that was thrown.
+     * @param request The HTTP request that triggered the exception, used to capture the URI.
+     * @return ResponseEntity containing a generic error message and 502 BAD GATEWAY.
+     */
+    @ExceptionHandler( ExternalServiceException.class )
+    public ResponseEntity< APIResponse > handleExternalServiceException(
+            ExternalServiceException exception,
+            HttpServletRequest request ) {
+
+        globalExceptionLogger.error(
+                "External service failure on path {}: {}",
+                request.getRequestURI( ),
+                exception.getMessage( )
+        );
+
+        APIResponse response = new APIResponse(
+                "The medication information service returned an invalid response. Please try again later.",
+                request.getRequestURI( )
+        );
+
+        return ResponseEntity
+                .status( HttpStatus.BAD_GATEWAY )
+                .body(response);
     }
 }

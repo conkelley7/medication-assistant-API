@@ -1,11 +1,10 @@
 package com.kelley.medicationassistant.dto;
 
 import com.kelley.medicationassistant.model.MedicationChatOption;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-
-import javax.validation.constraints.NotNull;
 
 /**
  * DTO for information requests.

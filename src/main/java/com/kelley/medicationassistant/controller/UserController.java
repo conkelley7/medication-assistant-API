@@ -2,6 +2,8 @@ package com.kelley.medicationassistant.controller;
 
 import com.kelley.medicationassistant.dto.SignUpRequest;
 import com.kelley.medicationassistant.dto.UserResponse;
+import com.kelley.medicationassistant.model.User;
+import com.kelley.medicationassistant.security.service.AuthUtil;
 import com.kelley.medicationassistant.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -17,9 +19,11 @@ import org.springframework.web.bind.annotation.*;
 public class UserController {
 
     private final UserService userService;
+    private final AuthUtil authUtil;
 
-    public UserController( UserService userService ) {
+    public UserController( UserService userService, AuthUtil authUtil ) {
         this.userService = userService;
+        this.authUtil = authUtil;
     }
 
     /**
@@ -29,7 +33,7 @@ public class UserController {
      * @return ResponseEntity containing UserResponse DTO (with user information) and 201 CREATED status.
      */
     @PostMapping( "/signup" )
-    public ResponseEntity<UserResponse> signUp( @RequestBody @Valid SignUpRequest signUpRequest ) {
+    public ResponseEntity< UserResponse > signUp( @RequestBody @Valid SignUpRequest signUpRequest ) {
 
         UserResponse userResponse = userService.signUp( signUpRequest );
         return new ResponseEntity<>( userResponse, HttpStatus.CREATED );
@@ -42,11 +46,13 @@ public class UserController {
      * @param username The username of the user to be deleted.
      * @return ResponseEntity containing the UserResponse DTO (with user information) and 200 OK status.
      */
-    @DeleteMapping( "/delete/{username}" )
-    public ResponseEntity<UserResponse> deleteUserByUsername( @PathVariable String username ) {
+    @DeleteMapping( "/delete" )
+    public ResponseEntity< Void > deleteLoggedInUser( @PathVariable String username ) {
 
-        UserResponse userResponse = userService.deleteUserByUsername( username );
-        return new ResponseEntity<>( userResponse, HttpStatus.OK );
+        User user = authUtil.getLoggedInUser( );
+
+        userService.deleteUser( user );
+        return new ResponseEntity<>( HttpStatus.NO_CONTENT );
 
     }
 
