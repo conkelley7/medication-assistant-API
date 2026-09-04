@@ -45,21 +45,4 @@ public class SearchHistoryController {
 
     }
 
-    /**
-     * Retrieves search history for a user given a user ID.
-     *
-     * @param userId ID of the user for whom to retrieve search history
-     * @param pageable pagination parameters
-     * @return page of search history DTO objects
-     */
-    @GetMapping( "/{userId}" )
-    public ResponseEntity<Page<SearchDTO>> getSearchHistoryByUserId( @PathVariable Long userId, Pageable pageable ) {
-
-        Page<SearchDTO> searchDTOPage = searchHistoryService.getSearchHistoryByUserId( userId, pageable );
-
-        return new ResponseEntity<>( searchDTOPage, HttpStatus.OK );
-
-    }
-
-
 }

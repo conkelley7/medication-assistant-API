@@ -1,6 +1,7 @@
 package com.kelley.medicationassistant.service;
 
 import com.kelley.medicationassistant.exception.APIException;
+import com.kelley.medicationassistant.exception.ExternalServiceException;
 import com.kelley.medicationassistant.openai.dto.ChatMessage;
 import com.kelley.medicationassistant.openai.feignclient.OpenAiClient;
 import com.kelley.medicationassistant.rxnorm.RxNormClient;
@@ -92,11 +93,14 @@ public class MedicationServiceImpl implements MedicationService {
         medicationServicelogger.info( "Sending chat request to OpenAI API" );
         OpenAiResponse openAiResponse = openAiClient.chat( openAiRequest );
 
+        List< OpenAiResponse.Choice > choices = openAiResponse.getChoices( );
+
+        if ( choices.isEmpty( ) || choices.get( 0 ) == null ) {
+            throw new ExternalServiceException( "Issue retreiving response from OpenAI" );
+        }
+
         // Create Prompt Response containing OpenAI assistant's reply
-        return new PromptResponse( openAiResponse.getChoices( )
-                .get( 0 )
-                .getMessage( )
-                .getContent( ) );
+        return new PromptResponse( choices.get( 0 ).getMessage( ).getContent( ) );
 
     }
 

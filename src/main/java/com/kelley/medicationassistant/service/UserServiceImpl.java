@@ -34,14 +34,9 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserResponse deleteUserByUsername( String username ) {
-
-        User user = userRepository.findByUsername( username )
-                .orElseThrow( ( ) -> new APIException( "User not found with username: " + username ) );
+    public void deleteUser( User user ) {
 
         userRepository.delete( user );
-
-        return modelMapper.map( user, UserResponse.class );
 
     }
 }

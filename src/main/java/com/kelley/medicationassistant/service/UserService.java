@@ -2,6 +2,7 @@ package com.kelley.medicationassistant.service;
 
 import com.kelley.medicationassistant.dto.SignUpRequest;
 import com.kelley.medicationassistant.dto.UserResponse;
+import com.kelley.medicationassistant.model.User;
 import jakarta.validation.Valid;
 
 /**
@@ -19,8 +20,7 @@ public interface UserService {
     /**
      * Service method to handle deleting user accounts
      *
-     * @param username username of the account to be deleted
-     * @return UserResponse DTO containing the details of the deleted user
+     * @param User user to be deleted
      */
-    UserResponse deleteUserByUsername( String username );
+    void deleteUser( User user );
 }
