@@ -93,6 +93,10 @@ public class MedicationServiceImpl implements MedicationService {
         medicationServicelogger.info( "Sending chat request to OpenAI API" );
         OpenAiResponse openAiResponse = openAiClient.chat( openAiRequest );
 
+        if ( openAiResponse == null ) {
+            throw new ExternalServiceException( "Issue retrieving response from OpenAI" );
+        }
+
         List< OpenAiResponse.Choice > choices = openAiResponse.getChoices( );
 
         if ( choices.isEmpty( ) || choices.get( 0 ) == null ) {
