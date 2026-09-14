@@ -28,7 +28,7 @@ public class OpenAiGateway {
                 || response.getChoices( ).isEmpty( )
                 || response.getChoices( ).get( 0 ) == null
                 || response.getChoices( ).get( 0 ).getMessage( ) == null
-                || response.getChoices( ).get(0).getMessage( ).getContent( ) == null ) {
+                || response.getChoices( ).get( 0 ).getMessage( ).getContent( ) == null ) {
 
             throw new ExternalServiceException(
                     "OpenAI returned an empty or malformed response"

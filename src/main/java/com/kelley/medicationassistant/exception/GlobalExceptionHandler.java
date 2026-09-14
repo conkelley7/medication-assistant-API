@@ -53,7 +53,7 @@ public class GlobalExceptionHandler {
                 "An unexpected error has occurred. Please try again later.",
                 request.getRequestURI( )
         );
-        return new ResponseEntity<>( apiResponse, HttpStatus.INTERNAL_SERVER_ERROR );
+        return new ResponseEntity<>( apiResponse, HttpStatus.BAD_GATEWAY );
 
     }
 

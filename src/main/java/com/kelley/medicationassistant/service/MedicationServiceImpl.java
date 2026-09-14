@@ -1,9 +1,7 @@
 package com.kelley.medicationassistant.service;
 
 import com.kelley.medicationassistant.exception.APIException;
-import com.kelley.medicationassistant.exception.ExternalServiceException;
 import com.kelley.medicationassistant.openai.dto.ChatMessage;
-import com.kelley.medicationassistant.openai.feignclient.OpenAiClient;
 import com.kelley.medicationassistant.openai.gateway.OpenAiGateway;
 import com.kelley.medicationassistant.rxnorm.RxNormClient;
 import com.kelley.medicationassistant.model.Medication;
