@@ -11,7 +11,7 @@ A Spring Boot RESTful API that integrates with the [RxNorm API](https://lhncbc.n
 - Spring Boot 3.x
 - Spring Web
 - Spring Security with JWT
-- OpenFeign for external APIs
+- OpenFeign + Resilience4J for external APIs
 - JUnit 5 & Mockito for testing
 - Lombok for boilerplate reduction
 - Docker Compose support

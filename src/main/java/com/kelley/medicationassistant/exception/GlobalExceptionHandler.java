@@ -2,6 +2,7 @@ package com.kelley.medicationassistant.exception;
 
 import com.kelley.medicationassistant.dto.APIResponse;
 import feign.FeignException;
+import io.github.resilience4j.circuitbreaker.CallNotPermittedException;
 import jakarta.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -52,7 +53,7 @@ public class GlobalExceptionHandler {
                 "An unexpected error has occurred. Please try again later.",
                 request.getRequestURI( )
         );
-        return new ResponseEntity<>( apiResponse, HttpStatus.INTERNAL_SERVER_ERROR );
+        return new ResponseEntity<>( apiResponse, HttpStatus.BAD_GATEWAY );
 
     }
 
@@ -82,6 +83,26 @@ public class GlobalExceptionHandler {
 
         return ResponseEntity
                 .status( HttpStatus.BAD_GATEWAY )
-                .body(response);
+                .body( response );
+    }
+
+    @ExceptionHandler( CallNotPermittedException.class )
+    public ResponseEntity< APIResponse > handleOpenCircuit(
+            CallNotPermittedException exception,
+            HttpServletRequest request ) {
+
+        globalExceptionLogger.warn(
+                "External service circuit breaker is open on path {}",
+                request.getRequestURI( )
+        );
+
+        APIResponse response = new APIResponse(
+                "The medication information service is temporarily unavailable. Please try again later.",
+                request.getRequestURI( )
+        );
+
+        return ResponseEntity
+                .status( HttpStatus.SERVICE_UNAVAILABLE )
+                .body( response );
     }
 }
