@@ -4,6 +4,7 @@ import com.kelley.medicationassistant.exception.APIException;
 import com.kelley.medicationassistant.exception.ExternalServiceException;
 import com.kelley.medicationassistant.openai.dto.ChatMessage;
 import com.kelley.medicationassistant.openai.feignclient.OpenAiClient;
+import com.kelley.medicationassistant.openai.gateway.OpenAiGateway;
 import com.kelley.medicationassistant.rxnorm.RxNormClient;
 import com.kelley.medicationassistant.model.Medication;
 import com.kelley.medicationassistant.dto.*;
@@ -29,7 +30,7 @@ import java.util.List;
 public class MedicationServiceImpl implements MedicationService {
 
     private final RxNormClient rxNormClient;
-    private final OpenAiClient openAiClient;
+    private final OpenAiGateway openAiGateway;
     private final SearchHistoryService searchHistoryService;
 
     private final Logger medicationServicelogger = LoggerFactory.getLogger(MedicationServiceImpl.class);
@@ -37,10 +38,10 @@ public class MedicationServiceImpl implements MedicationService {
     @Value( "${spring.ai.openai.model}" )
     private String model;
 
-    public MedicationServiceImpl( RxNormClient rxNormClient, OpenAiClient openAiClient,
+    public MedicationServiceImpl( RxNormClient rxNormClient, OpenAiGateway openAiGateway,
                                  SearchHistoryService searchHistoryService ) {
         this.rxNormClient = rxNormClient;
-        this.openAiClient = openAiClient;
+        this.openAiGateway = openAiGateway;
         this.searchHistoryService = searchHistoryService;
     }
 
@@ -89,22 +90,12 @@ public class MedicationServiceImpl implements MedicationService {
         openAiRequest.setModel( model );
         openAiRequest.setMessages( List.of( message ) );
 
-        // Call OpenAI API using OpenFeign client
+        // Call OpenAI API using OpenFeign client - Gateway ensures a clean response is returned
         medicationServicelogger.info( "Sending chat request to OpenAI API" );
-        OpenAiResponse openAiResponse = openAiClient.chat( openAiRequest );
-
-        if ( openAiResponse == null ) {
-            throw new ExternalServiceException( "Issue retrieving response from OpenAI" );
-        }
-
-        List< OpenAiResponse.Choice > choices = openAiResponse.getChoices( );
-
-        if ( choices.isEmpty( ) || choices.get( 0 ) == null ) {
-            throw new ExternalServiceException( "Issue retreiving response from OpenAI" );
-        }
+        OpenAiResponse openAiResponse = openAiGateway.chat( openAiRequest );
 
         // Create Prompt Response containing OpenAI assistant's reply
-        return new PromptResponse( choices.get( 0 ).getMessage( ).getContent( ) );
+        return new PromptResponse( openAiResponse.getChoices( ).get( 0 ).getMessage( ).getContent( ) );
 
     }
 

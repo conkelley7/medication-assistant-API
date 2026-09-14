@@ -1,7 +1,7 @@
 package com.kelley.medicationassistant.service;
 
 import com.kelley.medicationassistant.openai.dto.ChatMessage;
-import com.kelley.medicationassistant.openai.feignclient.OpenAiClient;
+import com.kelley.medicationassistant.openai.gateway.OpenAiGateway;
 import com.kelley.medicationassistant.rxnorm.RxNormClient;
 import com.kelley.medicationassistant.model.Medication;
 import com.kelley.medicationassistant.model.MedicationChatOption;
@@ -32,7 +32,7 @@ public class MedicationServiceTest {
     private MedicationServiceImpl medicationService;
 
     @Mock
-    private OpenAiClient openAiClient;
+    private OpenAiGateway openAiGateway;
 
     @Mock
     private RxNormClient rxNormClient;
@@ -57,7 +57,7 @@ public class MedicationServiceTest {
         OpenAiResponse mockResponse = new OpenAiResponse(List.of(new OpenAiResponse.Choice(0, assistantMessage)));
 
         // State that mocked openAI client will always return the mocked response
-        when(openAiClient.chat(any(OpenAiRequest.class))).thenReturn(mockResponse);
+        when(openAiGateway.chat(any(OpenAiRequest.class))).thenReturn(mockResponse);
 
         /*
          * When
